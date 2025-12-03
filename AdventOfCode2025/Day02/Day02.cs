@@ -8,7 +8,7 @@ public class Day02
     private static long sumInvalidIdsPart1 = 0;
     private static long sumInvalidIdsPart2 = 0;
 
-    internal static void Task1()
+    internal static void Task1and2()
     {
         List<string> productIdRanges = [.. File.ReadLines(inputPath).First().Split(',')];
 
