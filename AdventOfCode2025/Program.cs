@@ -48,7 +48,7 @@ internal class Program
                 Day05.Day05.Task1and2();
                 break;
             case 6:
-                Day06.Day06.Task1();
+                Day06.Day06.Task1and2();
                 break;
         }
 
