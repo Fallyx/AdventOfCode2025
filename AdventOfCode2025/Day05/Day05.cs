@@ -14,10 +14,7 @@ public class Day05
         foreach (string line in lines)
         {
             if (line.Length == 0)
-            {
                 rangeLines = false;
-                continue;
-            }
             else if (rangeLines)
             {
                 long[] range = [.. line.Split('-').Select(long.Parse)];
