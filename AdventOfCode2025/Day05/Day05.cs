@@ -48,7 +48,7 @@ public class Day05
         Console.WriteLine($"Task 2: {task2Ranges.Sum(i => i.Max - i.Min + 1)}");
     }
 
-    internal record Range(long Min, long Max)
+    private record Range(long Min, long Max)
     {
         public long Min {get; set;} = Min;
         public long Max {get; set;} = Max;
