@@ -11,26 +11,45 @@ public class Day07
         List<string> lines = [.. File.ReadAllLines(inputPath)];
         int yMax = lines.Count;
         int xMax = lines[0].Length;
-        HashSet<Vector2> beams = [new(lines[0].IndexOf('S'), 0)];
         HashSet<Vector2> splitters = [];
+        Dictionary<Vector2, long> beams = new()
+        {
+            { new(lines[0].IndexOf('S'), 0), 1 }
+        };
 
         for (int y = 1; y < yMax; y++)
         {
-            HashSet<Vector2> nextBeams = [];
+            Dictionary<Vector2, long> nextBeams = [];
 
-            foreach(Vector2 currentBeam in beams)
+            foreach(KeyValuePair<Vector2, long> currentBeam in beams)
             {
-                if (lines[y][(int)currentBeam.X] == '^')
+                if (lines[y][(int)currentBeam.Key.X] == '^')
                 {
-                    splitters.Add(new(currentBeam.X, y));
-                    if (currentBeam.X - 1 >= 0)
-                        nextBeams.Add(new(currentBeam.X - 1, y));
-                    if (currentBeam.X + 1 < xMax)
-                        nextBeams.Add(new(currentBeam.X + 1, y));
+                    splitters.Add(new(currentBeam.Key.X, y));
+                    if (currentBeam.Key.X - 1 >= 0)
+                    {
+                        Vector2 newBeamPos = new(currentBeam.Key.X - 1, y);
+                        if (nextBeams.ContainsKey(newBeamPos))
+                            nextBeams[newBeamPos] += currentBeam.Value;
+                        else
+                            nextBeams.Add(newBeamPos, currentBeam.Value);
+                    }
+                    if (currentBeam.Key.X + 1 < xMax)
+                    {
+                        Vector2 newBeamPos = new(currentBeam.Key.X + 1, y);
+                        if (nextBeams.ContainsKey(newBeamPos))
+                            nextBeams[newBeamPos] += currentBeam.Value;
+                        else
+                            nextBeams.Add(newBeamPos, currentBeam.Value);
+                    }
                 }
                 else
                 {
-                    nextBeams.Add(new(currentBeam.X, y));
+                    Vector2 newBeamPos = new(currentBeam.Key.X, y);
+                    if (nextBeams.ContainsKey(newBeamPos))
+                        nextBeams[newBeamPos] += currentBeam.Value;
+                    else
+                        nextBeams.Add(newBeamPos, currentBeam.Value);
                 }
             }
 
@@ -38,6 +57,7 @@ public class Day07
         }
 
         Console.WriteLine($"Task 1: {splitters.Count}");
+        Console.WriteLine($"Task 2: {beams.Where(b => b.Key.Y == yMax - 1).Sum(b => b.Value)}");
     }
 
     private record Splitter(Vector2 Pos, bool Used = false)
