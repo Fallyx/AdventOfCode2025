@@ -20,7 +20,6 @@ public class Day07
         for (int y = 1; y < yMax; y++)
         {
             Dictionary<Vector2, long> nextBeams = [];
-
             foreach(KeyValuePair<Vector2, long> currentBeam in beams)
             {
                 if (lines[y][(int)currentBeam.Key.X] == '^')
