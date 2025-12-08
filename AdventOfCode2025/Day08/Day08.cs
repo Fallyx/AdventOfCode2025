@@ -6,10 +6,10 @@ public class Day08
 {
     const string inputPath = @"Day08/Input.txt";
 
-    public static void Task1()
+    public static void Task1and2()
     {
         List<string> lines = [.. File.ReadAllLines(inputPath)];
-        int amountPairs = 1000;
+        int amountPairsTask1 = 1000;
         List<Vector4> boxes = []; // w = circuit group
         List<Junction> junctions = [];
         int groupCounter = 1;
@@ -27,12 +27,28 @@ public class Day08
         }
 
         junctions = [.. junctions.OrderBy(d => d.Distance)];
+        int counter = -1;
 
-        for (int i = 0; i < amountPairs; i++)
+        while (true)
         {
-            Junction current = junctions[i];
-            int newGroup = (int) boxes[current.A].W;
-            int oldGroup = (int) boxes[current.B].W;
+            counter++;
+            List<int> junctionSize = [.. boxes.GroupBy(b => b.W).OrderByDescending(s => s.Count()).Select(s => s.Count())];
+
+            if (counter == amountPairsTask1)
+                Console.WriteLine($"Task 1: {junctionSize[0] * junctionSize[1] * junctionSize[2]}");
+
+            Junction current = junctions[counter];
+            Vector4 a = boxes[current.A];
+            Vector4 b = boxes[current.B];
+
+            if (junctionSize.Count == 2 && a.W != b.W)
+            {
+                Console.WriteLine($"Task 2: {(long) a.X * (long) b.X}");
+                break;
+            }
+
+            int newGroup = (int) a.W;
+            int oldGroup = (int) b.W;
 
             if (newGroup == oldGroup)
                 continue;
@@ -47,9 +63,6 @@ public class Day08
                 }
             }
         }
-
-        List<int> junctionSize = [.. boxes.GroupBy(b => b.W).OrderByDescending(s => s.Count()).Select(s => s.Count())];
-        Console.WriteLine($"Task 1: {junctionSize[0] * junctionSize[1] * junctionSize[2]}");
     }
 
     private static double Distance(Vector4 start, Vector4 end)
